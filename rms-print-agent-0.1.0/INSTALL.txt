@@ -1,0 +1,21 @@
+RMS print agent - installing on a venue PC
+
+1. In the restaurant settings, add a print agent. It shows a one-time code (valid for 24 hours).
+2. Copy this whole folder to the PC, e.g. C:\Program Files\RMS Print Agent
+3. Open the Start menu, search for "cmd", right-click it, choose "Run as administrator".
+4. In that window:
+
+     cd "C:\Program Files\RMS Print Agent"
+     print-agent enrol --server https://YOUR-SERVER-ADDRESS --code XXXX-XXXX-XXXX
+
+5. Start it now, and at every boot:
+
+     print-agent install
+
+6. Check:   print-agent status
+
+7. In the restaurant settings (Settings > Printing), add the printers and press
+   Send test page on each. They are sent to this PC; no file is edited here.
+
+To move to another PC: make a new code for the same agent in the settings and repeat from step 2.
+To remove:  print-agent uninstall

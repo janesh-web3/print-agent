@@ -1,0 +1,8 @@
+{
+  "default": "Counter",
+  "printers": {
+    "Counter": { "type": "network", "host": "192.168.1.50", "port": 9100, "columns": 48, "cut": true },
+    "Kitchen_Printer": { "type": "network", "host": "192.168.1.51" },
+    "Bar_Printer": { "type": "windows", "name": "POS-80", "columns": 48 }
+  }
+}

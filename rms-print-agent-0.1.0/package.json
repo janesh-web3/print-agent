@@ -1,0 +1,31 @@
+{
+  "name": "rms-print-agent",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Print agent for the Restaurant Management System: runs on a venue's reception PC, receives tickets from the server and prints them on the venue's printers.",
+  "license": "UNLICENSED",
+  "main": "dist/index.js",
+  "bin": {
+    "print-agent": "dist/cli.js"
+  },
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "cli": "node dist/cli.js",
+    "package": "node scripts/package.js",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "socket.io-client": "^4.8.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "socket.io": "^4.7.2",
+    "typescript": "^5.1.6",
+    "vitest": "^2.1.9"
+  }
+}

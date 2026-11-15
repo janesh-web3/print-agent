@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Auto-print setup guide: new restaurant or hotel</title>
+<style>
+  :root {
+    --bg: #ffffff; --text: #1d2433; --muted: #5b6475; --line: #dde1e8;
+    --brand: #1f5fbf; --brand-soft: #e8f0fc;
+    --ok: #17703a; --ok-soft: #e6f5ec;
+    --warn: #8a5a00; --warn-soft: #fff4dc;
+    --bad: #a12626; --bad-soft: #fde9e9;
+    --code-bg: #f3f5f8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #12161d; --text: #e6e9ef; --muted: #9aa3b2; --line: #2b3240;
+      --brand: #6ea0ee; --brand-soft: #1a2638;
+      --ok: #5fcf8b; --ok-soft: #14291d;
+      --warn: #f0c060; --warn-soft: #2e2512;
+      --bad: #f08a8a; --bad-soft: #301818;
+      --code-bg: #1b212c;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 24px 16px 80px; }
+  header h1 { margin: 0 0 4px; font-size: 1.9rem; line-height: 1.2; }
+  header p { margin: 0; color: var(--muted); }
+  nav { margin: 24px 0 8px; padding: 16px 20px; background: var(--brand-soft); border-radius: 10px; }
+  nav h2 { margin: 0 0 8px; font-size: 1rem; border: 0; padding: 0; }
+  nav ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 32px; }
+  nav a { color: var(--brand); text-decoration: none; }
+  nav a:hover { text-decoration: underline; }
+  h2 { margin: 48px 0 12px; padding-top: 16px; border-top: 2px solid var(--line); font-size: 1.45rem; line-height: 1.25; }
+  h3 { margin: 28px 0 8px; font-size: 1.1rem; }
+  p, li { max-width: 74ch; }
+  code { background: var(--code-bg); padding: 1px 6px; border-radius: 4px; font: 0.88em ui-monospace, Consolas, "Courier New", monospace; }
+  pre { background: var(--code-bg); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; overflow-x: auto; margin: 10px 0; }
+  pre code { background: none; padding: 0; font-size: 0.9rem; }
+  .step { display: flex; gap: 14px; margin: 18px 0; }
+  .step > .n { flex: none; width: 32px; height: 32px; border-radius: 50%; background: var(--brand); color: #fff; font-weight: 700; display: grid; place-items: center; margin-top: 2px; }
+  @media (prefers-color-scheme: dark) { .step > .n { color: #0b1220; } }
+  .step > .body { flex: 1; min-width: 0; }
+  .step .body > :first-child { margin-top: 0; }
+  .step h3 { margin-top: 0; }
+  .note { margin: 14px 0; padding: 12px 16px; border-radius: 8px; border-left: 4px solid var(--brand); background: var(--brand-soft); }
+  .note.ok { border-color: var(--ok); background: var(--ok-soft); }
+  .note.warn { border-color: var(--warn); background: var(--warn-soft); }
+  .note.bad { border-color: var(--bad); background: var(--bad-soft); }
+  .note > :first-child { margin-top: 0; } .note > :last-child { margin-bottom: 0; }
+  .note strong.t { display: block; margin-bottom: 2px; }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 0.95rem; }
+  th, td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { background: var(--code-bg); }
+  .checklist { list-style: none; padding-left: 0; }
+  .checklist li { padding: 6px 0 6px 34px; position: relative; border-bottom: 1px dashed var(--line); }
+  .checklist li::before { content: ""; position: absolute; left: 6px; top: 10px; width: 16px; height: 16px; border: 2px solid var(--muted); border-radius: 3px; }
+  .ui { font-weight: 600; }
+  .who { display: inline-block; font-size: 0.78rem; font-weight: 600; padding: 1px 8px; border-radius: 999px; background: var(--code-bg); color: var(--muted); vertical-align: middle; }
+  details { border: 1px solid var(--line); border-radius: 8px; padding: 8px 14px; margin: 10px 0; }
+  details summary { cursor: pointer; font-weight: 600; }
+  footer { margin-top: 56px; color: var(--muted); font-size: 0.9rem; border-top: 1px solid var(--line); padding-top: 16px; }
+  @media (max-width: 640px) { nav ol { columns: 1; } .step { gap: 10px; } }
+  @media print { nav { display: none; } h2 { break-after: avoid; } .step, .note, pre, table { break-inside: avoid; } body { font-size: 13px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Auto-print setup guide</h1>
+  <p>Setting up automatic kitchen, bar and bill printing at a new restaurant or hotel, step by step. For the person installing at the venue.</p>
+</header>
+
+<nav aria-label="Contents">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#how">How auto-print works</a></li>
+    <li><a href="#before">Before you go</a></li>
+    <li><a href="#printers">Prepare the printers</a></li>
+    <li><a href="#settings">Add printers in the system</a></li>
+    <li><a href="#agent-code">Create the print agent code</a></li>
+    <li><a href="#install">Install the agent on the PC</a></li>
+    <li><a href="#test">Test it</a></li>
+    <li><a href="#power">Check power-cut recovery</a></li>
+    <li><a href="#daily">Day-to-day use</a></li>
+    <li><a href="#trouble">Troubleshooting</a></li>
+    <li><a href="#fallback">Restaurant or hotel: what differs</a></li>
+    <li><a href="#maintenance">Moving, removing, old sites</a></li>
+    <li><a href="#reference">Quick reference</a></li>
+  </ol>
+</nav>
+
+<!-- ============================================================ -->
+<h2 id="how">1. How auto-print works</h2>
+
+<p>When a waiter takes an order, the system saves a <strong>print job</strong> for each ticket. A small program called the <strong>print agent</strong> runs on the venue's reception PC, receives those jobs and sends them to the printers. It then tells the system whether each one printed.</p>
+
+<div class="note ok">
+  <strong class="t">The print agent is the only thing that prints automatically</strong>
+  <p>Saving an order, adding items, taking payment or placing a room-service order never opens a print window or dialog on any screen. If you want paper, either the agent prints it by itself (auto-print on) or staff press the <span class="ui">Print</span> button on the order or bill (auto-print off, or agent offline). The browser is never asked to print on its own, so there is no pop-up to dismiss and no ticket can print twice.</p>
+</div>
+
+<ul>
+  <li><strong>Kitchen ticket (KOT)</strong> &ndash; food items. <strong>Bar ticket (BOT)</strong> &ndash; drink items. <strong>Bill</strong> &ndash; the customer's receipt.</li>
+  <li>The agent starts by itself when the PC starts, with nobody logged in, and keeps its queue on disk. A power cut loses nothing it was already given.</li>
+  <li>If a ticket cannot print, staff see a red <strong>NOT PRINTED</strong> badge in the top bar and can press <strong>Reprint</strong>. Items are marked as printed only when the printer is confirmed to have received the ticket.</li>
+  <li>A ticket older than 10 minutes is <strong>not</strong> printed after the PC comes back; the kitchen should not cook for a table that has moved on. It shows as NOT PRINTED instead.</li>
+</ul>
+
+<h3>Which tickets does an order make?</h3>
+<table>
+  <tr><th>Venue has</th><th>What you set up</th><th>Result for each order</th></tr>
+  <tr><td>One printer for everything</td><td>One printer; Kitchen, Bar and Bills all point to it</td><td>One ticket with kitchen and bar items in separate sections</td></tr>
+  <tr><td>One printer, but separate papers wanted</td><td>Same, and turn on <span class="ui">KOT and BOT on separate papers</span></td><td>A KOT and a BOT, both on that printer</td></tr>
+  <tr><td>A kitchen printer and a bar printer</td><td>Two printers; Kitchen points to one, Bar to the other</td><td>A KOT on the kitchen printer, a BOT on the bar printer</td></tr>
+  <tr><td>Only a bar printer that prints both</td><td>One printer, all stations point to it</td><td>One ticket (or two papers, if you turn that on)</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="before">2. Before you go</h2>
+
+<h3>Check these first</h3>
+<ul class="checklist">
+  <li>The system is deployed and you can log in to it as an <strong>Admin</strong> or <strong>Manager</strong> (adding agents and printers needs the Restaurant Settings "Edit" permission).</li>
+  <li>The restaurant's <strong>subscription plan includes the Print Server feature</strong>. Without it, the <span class="ui">Add print agent</span> and <span class="ui">Add printer</span> buttons are refused. Enable it for the plan or restaurant before you travel.</li>
+  <li>The restaurant has the Dining module enabled (printing belongs to it).</li>
+  <li>The reception PC runs <strong>Windows 10 or 11</strong>, and you know an Administrator login for it.</li>
+  <li>The PC has internet and can reach the system's address in a browser.</li>
+  <li>You have the installer folder <code>rms-print-agent-&lt;version&gt;</code> on a USB drive (see below).</li>
+  <li>You know the system's server address, e.g. <code>https://app.example.com</code>. The settings screen also shows it inside the enrolment command (step 5).</li>
+</ul>
+
+<h3>Making the installer folder <span class="who">once, on any Windows machine, by a developer</span></h3>
+<pre><code>cd print-agent
+npm install
+npm run package</code></pre>
+<p>This produces <code>print-agent\release\rms-print-agent-&lt;version&gt;\</code>. It contains the agent, everything it needs and its own <code>node.exe</code>, so the venue PC needs no software installed. Copy that whole folder to a USB drive. Reuse the same folder for every venue.</p>
+
+<div class="note warn">
+  <strong class="t">Venue used the old print server?</strong>
+  <p>If the venue was running the older "local print server" (a Node program with a PC address like <code>http://192.168.1.x:4000</code>), run the migration <em>once</em> from the backend folder before the visit, and uninstall the old program afterwards:</p>
+  <pre><code>npm run migrate-printers -- --dry-run     # shows what would be created
+npm run migrate-printers                  # creates the printers</code></pre>
+  <p>It turns the printer names in that venue's settings into Windows-type printers. It skips venues that already have printers, so running it twice is safe. Section 12 has more.</p>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="printers">3. Prepare the printers <span class="who">at the venue</span></h2>
+
+<p>Do this <em>before</em> touching the system. The best test of the hardware is the printer's own self-test, not our software.</p>
+
+<h3>Network (Ethernet or Wi-Fi) printers</h3>
+<div class="step"><div class="n">1</div><div class="body">
+  <p>Connect the printer to the router by cable (recommended) or Wi-Fi, and power it on with paper loaded.</p>
+</div></div>
+<div class="step"><div class="n">2</div><div class="body">
+  <p>Print the <strong>self-test slip</strong> (usually: hold the FEED button while powering on). It lists the printer's <strong>IP address</strong>. Write it down.</p>
+</div></div>
+<div class="step"><div class="n">3</div><div class="body">
+  <p><strong>Make that IP permanent.</strong> If the router hands out a different address after a power cut, printing silently stops. Do one of:</p>
+  <ul>
+    <li>In the router, add a <em>DHCP reservation</em> (also called "static lease") for the printer, or</li>
+    <li>Set a fixed IP on the printer itself, outside the router's automatic range.</li>
+  </ul>
+</div></div>
+<div class="step"><div class="n">4</div><div class="body">
+  <p>Check the PC can reach it. In a command prompt on the reception PC:</p>
+  <pre><code>ping 192.168.1.50</code></pre>
+  <p>You should get replies. The agent sends tickets to port <strong>9100</strong>, which almost all receipt printers use. Nothing else needs configuring.</p>
+</div></div>
+
+<h3>USB printers</h3>
+<div class="step"><div class="n">1</div><div class="body">
+  <p>Plug the printer into the reception PC and install its Windows driver (from the maker, or Windows may do it automatically).</p>
+</div></div>
+<div class="step"><div class="n">2</div><div class="body">
+  <p>Open <span class="ui">Settings &rarr; Bluetooth &amp; devices &rarr; Printers &amp; scanners</span>. Note the printer's name <strong>exactly</strong>, including capitals and spaces (e.g. <code>POS-80</code>). You will type it in the system later.</p>
+</div></div>
+<div class="step"><div class="n">3</div><div class="body">
+  <p>Open the printer, choose <span class="ui">Printer properties &rarr; Print Test Page</span> and confirm paper comes out. If it does not, fix the driver or cable first.</p>
+</div></div>
+
+<div class="note">
+  <strong class="t">Paper width</strong>
+  Standard rolls are 80&nbsp;mm (48 characters per line). Small rolls are 58&nbsp;mm (32 characters). You will pick this when adding the printer.
+</div>
+
+<!-- ============================================================ -->
+<h2 id="settings">4. Add the printers in the system <span class="who">Admin / Manager</span></h2>
+
+<p>Log in to the system in a browser, from any computer, and open <span class="ui">Settings &rarr; Printing</span>.</p>
+
+<div class="step"><div class="n">1</div><div class="body">
+  <h3>Add each printer</h3>
+  <p>Press <span class="ui">Add printer</span> and fill in:</p>
+  <table>
+    <tr><th>Field</th><th>What to enter</th></tr>
+    <tr><td>Name</td><td>A label you will recognise, e.g. <code>Kitchen</code>, <code>Bar</code>, <code>Counter</code>. Names are not case-sensitive and must be unique.</td></tr>
+    <tr><td>How is it connected?</td><td><em>Network cable or Wi-Fi</em> or <em>USB cable</em>.</td></tr>
+    <tr><td>Printer address / Port (network)</td><td>The IP from the self-test slip. Port <code>9100</code> unless the printer's manual says otherwise.</td></tr>
+    <tr><td>Name in Windows (USB)</td><td>Exactly as it appears in Windows' Printers &amp; scanners list.</td></tr>
+    <tr><td>Paper width</td><td>80&nbsp;mm or 58&nbsp;mm.</td></tr>
+    <tr><td>Cut the paper</td><td>On, unless the printer has no cutter.</td></tr>
+    <tr><td>Check paper first (network)</td><td>Leave on. The agent asks the printer if it is out of paper or has its cover open, and waits instead of sending a ticket into a printer that cannot print it.</td></tr>
+  </table>
+  <p>Repeat for every printer (kitchen, bar, counter).</p>
+</div></div>
+
+<div class="step"><div class="n">2</div><div class="body">
+  <h3>Say which printer prints what</h3>
+  <p>Once at least one printer exists, <span class="ui">Which printer prints what</span> appears. Choose a printer for each of:</p>
+  <ul>
+    <li><span class="ui">Kitchen tickets (KOT)</span> &ndash; food items</li>
+    <li><span class="ui">Bar tickets (BOT)</span> &ndash; drink items</li>
+    <li><span class="ui">Bills</span> &ndash; the customer's receipt</li>
+  </ul>
+  <p>The line above the choices tells you what one order will print: different kitchen and bar printers give two tickets, the same printer gives one.</p>
+  <div class="note warn">
+    <strong class="t">Untouched defaults are not printers</strong>
+    Older settings may show names like <code>Kitchen_Printer</code> marked "(not set up here)". Pick a real printer from the list; those old names do nothing.
+  </div>
+</div></div>
+
+<div class="step"><div class="n">3</div><div class="body">
+  <h3>Set the automation options</h3>
+  <table>
+    <tr><th>Switch</th><th>Meaning</th></tr>
+    <tr><td><span class="ui">Print automatically</span></td><td><strong>On</strong> for auto-print through the agent. <strong>Off</strong> means nothing prints by itself and staff use the Print buttons (the agent is not used).</td></tr>
+    <tr><td><span class="ui">New orders (and room service)</span></td><td>Print a ticket when an order is placed.</td></tr>
+    <tr><td><span class="ui">Items added to a running order</span></td><td>Print only the new items when more are added to an open table.</td></tr>
+    <tr><td><span class="ui">KOT and BOT on separate papers</span></td><td>For one shared printer, print kitchen and bar items on separate papers. Hotels (Rooms module) have this on by default. It is locked on when kitchen and bar already have different printers.</td></tr>
+    <tr><td><span class="ui">Show KOT confirmation</span></td><td>Ask the waiter to confirm before a kitchen ticket is sent (optional).</td></tr>
+  </table>
+  <p>Press <span class="ui">Save printing settings</span>.</p>
+</div></div>
+
+<div class="note">
+  <strong class="t">Nothing is sent to a printer yet</strong>
+  The printers are saved on the server and will be sent to the agent as soon as it is installed. Tickets made before that appear as NOT PRINTED with the reason "No printers are set up", never silently lost.
+</div>
+
+<!-- ============================================================ -->
+<h2 id="agent-code">5. Create the print agent code <span class="who">Admin / Manager</span></h2>
+
+<div class="step"><div class="n">1</div><div class="body">
+  <p>In <span class="ui">Settings &rarr; Printing</span>, find <span class="ui">Print agent</span> and press <span class="ui">Add print agent</span>.</p>
+</div></div>
+<div class="step"><div class="n">2</div><div class="body">
+  <p>Enter a <span class="ui">Computer name</span> such as <code>Reception PC</code> and confirm.</p>
+</div></div>
+<div class="step"><div class="n">3</div><div class="body">
+  <p>A box appears with a <strong>one-time enrolment code</strong> like <code>7K3M-9QX2-H4TD</code> and the full command to run. Use <span class="ui">Copy command</span> and paste it somewhere you can reach from the PC (a note on your phone, an email to yourself).</p>
+  <div class="note bad">
+    <strong class="t">The code is shown once</strong>
+    It works <strong>one time</strong> and expires after <strong>24 hours</strong>. Only a scrambled copy is stored, so it cannot be shown again. If you lose it or it expires, press <span class="ui">New code</span> on that agent.
+  </div>
+</div></div>
+
+<!-- ============================================================ -->
+<h2 id="install">6. Install the agent on the reception PC <span class="who">at the PC, Windows Administrator</span></h2>
+
+<div class="step"><div class="n">1</div><div class="body">
+  <h3>Copy the folder</h3>
+  <p>Copy the whole <code>rms-print-agent-&lt;version&gt;</code> folder from the USB drive to the PC and rename or place it at:</p>
+  <pre><code>C:\Program Files\RMS Print Agent</code></pre>
+  <p>Keep it there; the agent runs from this folder.</p>
+</div></div>
+
+<div class="step"><div class="n">2</div><div class="body">
+  <h3>Open a command prompt as administrator</h3>
+  <p>Start menu &rarr; type <strong>cmd</strong> &rarr; right-click <em>Command Prompt</em> &rarr; <strong>Run as administrator</strong> &rarr; Yes. The title bar should say "Administrator".</p>
+</div></div>
+
+<div class="step"><div class="n">3</div><div class="body">
+  <h3>Enrol this PC</h3>
+  <pre><code>cd "C:\Program Files\RMS Print Agent"
+print-agent enrol --server https://YOUR-SERVER-ADDRESS --code XXXX-XXXX-XXXX</code></pre>
+  <p>Paste the exact command from the settings screen. Use the server address <strong>without</strong> <code>/api</code> on the end.</p>
+  <p>On success it prints <em>Enrolled as "Reception PC" for &lt;restaurant name&gt;</em>. This saves the PC's secret sign-in token (encrypted so it is useless on any other PC) and locks the data folder <code>C:\ProgramData\RMS Print Agent</code> to administrators.</p>
+  <div class="note warn">
+    <strong class="t">If enrol fails</strong>
+    The message is deliberately the same for a wrong, used or expired code. Check you typed it correctly, then press <span class="ui">New code</span> and try the new one. Also check the PC can open the server address in a browser.
+  </div>
+</div></div>
+
+<div class="step"><div class="n">4</div><div class="body">
+  <h3>Start it now and at every boot</h3>
+  <pre><code>print-agent install</code></pre>
+  <p>This creates a Windows scheduled task named <strong>RMS Print Agent</strong> that runs at startup as the SYSTEM account, so it works with nobody logged in. If it stops, Windows restarts it within a minute.</p>
+</div></div>
+
+<div class="step"><div class="n">5</div><div class="body">
+  <h3>Check it</h3>
+  <pre><code>print-agent status</code></pre>
+  <p>You want to see: <em>enrolled</em>, <em>installed</em>, <em>running</em>, plus the last lines of the log. Back in the browser at <span class="ui">Settings &rarr; Printing</span>, the status banner should now read <strong>Print agent online</strong>.</p>
+</div></div>
+
+<div class="note ok">
+  <strong class="t">Printers arrive on their own</strong>
+  As soon as the agent connects, the server sends it the printer list. You do not copy or edit any file on the PC. (Advanced: a hand-written <code>printers.json</code> is only used when the server has no printers to send.)
+</div>
+
+<!-- ============================================================ -->
+<h2 id="test">7. Test it</h2>
+
+<div class="step"><div class="n">1</div><div class="body">
+  <h3>Send a test page to every printer</h3>
+  <p>In <span class="ui">Settings &rarr; Printing</span>, on each printer press <span class="ui">Send test page</span>. A short test slip should come out of <em>that</em> printer. The test goes through the agent on purpose, so a pass proves the agent can reach that exact printer.</p>
+  <p>Check: the text is readable and not cut off at the edges (if it is, the paper width is wrong), and the paper is cut (if not, switch <span class="ui">Cut the paper</span> or check the printer's cutter).</p>
+</div></div>
+
+<div class="step"><div class="n">2</div><div class="body">
+  <h3>Place a real order</h3>
+  <ol>
+    <li>Take an order with at least one food item and one drink item.</li>
+    <li>The kitchen/bar ticket(s) should print by themselves within a few seconds, with no dialog on screen.</li>
+    <li>Add another item to the same table: only the <em>new</em> item should print, marked as additional.</li>
+    <li>Settle the bill: the receipt should print on the Bills printer, with the invoice number, the BS and AD dates, and the PAN if set.</li>
+  </ol>
+</div></div>
+
+<div class="step"><div class="n">3</div><div class="body">
+  <h3>Test the failure path (worth two minutes)</h3>
+  <p>Switch a printer off, place an order that goes to it, wait a few seconds. The <strong>NOT PRINTED</strong> badge should appear after the agent gives up on that ticket (it retries for up to 10&nbsp;minutes; to see it sooner, remove the printer from the list in settings and order again). Switch the printer back on, open the badge and press <span class="ui">Reprint</span>. This is exactly what the staff will do in real life, so show them.</p>
+</div></div>
+
+<!-- ============================================================ -->
+<h2 id="power">8. Check power-cut recovery <span class="who">important, do once per venue</span></h2>
+
+<p>Reception PCs here are switched off at night and lose power. Prove the agent survives that before you leave.</p>
+
+<ul class="checklist">
+  <li><strong>Reboot without logging in.</strong> Restart the PC and do <em>not</em> log in. After about a minute, place an order from a phone or another device. The ticket should print. The banner in settings should show <strong>Print agent online</strong>.</li>
+  <li><strong>Kill the process.</strong> In Task Manager, end <code>node.exe</code> (the agent). It should be back within about a minute. (After a clean stop it returns within five.)</li>
+  <li><strong>Pull the power.</strong> Place an order while a printer is switched off so a ticket is queued, then unplug the PC. After power returns the ticket should print once, or show as NOT PRINTED if more than 10&nbsp;minutes have passed.</li>
+  <li><strong>Folder lock-down.</strong> In an administrator prompt: <code>icacls "C:\ProgramData\RMS Print Agent"</code>. Only <code>SYSTEM</code> and <code>Administrators</code> should be listed.</li>
+  <li><strong>Printer address still right after a router restart.</strong> Restart the router, then send a test page to each network printer.</li>
+</ul>
+
+<div class="note">
+  <strong class="t">Rare duplicate</strong>
+  A power cut in the exact instant a ticket is printing can produce one duplicate slip. This is accepted: a duplicate is safer than a lost kitchen order.
+</div>
+
+<!-- ============================================================ -->
+<h2 id="daily">9. Day-to-day use</h2>
+
+<h3>What staff will see</h3>
+<table>
+  <tr><th>Where</th><th>What it means</th><th>What to do</th></tr>
+  <tr><td>Top bar badge <strong>NOT PRINTED</strong> with a number</td><td>That many tickets failed to print or were too old to print after the PC was off.</td><td>Open it. For each ticket press <span class="ui">Reprint</span> (sends it again as a marked reprint) or <span class="ui">Dismiss</span> (the table has moved on; clears it without printing).</td></tr>
+  <tr><td>Settings &rarr; Printing banner: <strong>Print agent online</strong></td><td>Everything is working.</td><td>Nothing.</td></tr>
+  <tr><td>Banner: <strong>Print agent offline</strong></td><td>The PC is off, has no internet, or the agent is stopped. Tickets wait and print when it returns, unless older than 10&nbsp;minutes.</td><td>Check the PC and internet. Run <code>print-agent status</code>.</td></tr>
+  <tr><td>Banner: <strong>No print agent</strong></td><td>No agent is enrolled. Nothing prints by itself; staff can still use the Print buttons.</td><td>Install the agent (sections 5 and 6).</td></tr>
+</table>
+
+<h3>Bills and reprints</h3>
+<p>Printing a bill again from Billing marks it as a copy, as IRD requires: <em>COPY OF ORIGINAL &ndash; 1</em>, then 2, and so on. The count increases only when the bill was really sent to the printer. If a bill could not be sent, the screen says so and no copy is counted.</p>
+
+<h3>Changing printers later</h3>
+<p>Add, edit or delete printers in <span class="ui">Settings &rarr; Printing</span>. Changes reach the agent within seconds; nothing on the PC needs touching. If the router gives a printer a new IP, edit its address here.</p>
+
+<!-- ============================================================ -->
+<h2 id="trouble">10. Troubleshooting</h2>
+
+<table>
+  <tr><th>Symptom</th><th>Likely cause</th><th>Fix</th></tr>
+  <tr><td>Banner says <strong>Print agent offline</strong></td><td>PC off, no internet, or agent not running.</td><td>On the PC run <code>print-agent status</code>. If not running, <code>print-agent install</code> (as administrator). Check internet and that the server address opens in a browser.</td></tr>
+  <tr><td><code>print-agent</code> is "not recognised"</td><td>Command prompt is not in the agent folder.</td><td><code>cd "C:\Program Files\RMS Print Agent"</code> first.</td></tr>
+  <tr><td>"Run as administrator" error on enrol or install</td><td>Prompt is not elevated.</td><td>Close it; open cmd with right-click &rarr; Run as administrator.</td></tr>
+  <tr><td>Enrol says invalid or expired code</td><td>Typo, already used, or older than 24 hours.</td><td>Press <span class="ui">New code</span> on the agent in settings and use that one.</td></tr>
+  <tr><td>Tickets say "No printers are set up"</td><td>No printers added yet, or the list has not reached the agent.</td><td>Add printers in settings (section 4). Make sure the agent is online.</td></tr>
+  <tr><td>One order makes one combined ticket, but kitchen and bar have separate printers</td><td>Kitchen and Bar stations point to the same printer, or to a name that is not in the list ("not set up here").</td><td>In <span class="ui">Which printer prints what</span> choose a different real printer for each.</td></tr>
+  <tr><td>Ticket goes to the wrong printer</td><td>Station assignment or printer address/name is wrong.</td><td>Check <span class="ui">Which printer prints what</span>; send a test page to each printer to confirm which is which.</td></tr>
+  <tr><td>Network printer: tickets fail or wait, test page fails</td><td>Wrong or changed IP, printer off, cable, paper out, or cover open.</td><td>From the PC, <code>ping</code> the IP. Print a self-test slip to confirm the IP. Reserve the IP in the router. Check paper and cover.</td></tr>
+  <tr><td>USB printer: fails</td><td>Name in the system does not match Windows exactly, driver missing, or cable.</td><td>Copy the name exactly from Windows' printer list (watch spaces and capitals). Print a Windows test page first.</td></tr>
+  <tr><td>Text cut off at the edge, or tiny text</td><td>Wrong paper width.</td><td>Edit the printer: 80&nbsp;mm = 48 columns, 58&nbsp;mm = 32 columns.</td></tr>
+  <tr><td>Paper is not cut</td><td>Cut switch off, or printer has no cutter.</td><td>Turn <span class="ui">Cut the paper</span> on if the printer has a cutter.</td></tr>
+  <tr><td>Nepali (Devanagari) text prints as <code>?</code></td><td>Receipt printers have no Nepali font; the agent prints plain English letters only, on purpose.</td><td>Use English names for menu items on tickets.</td></tr>
+  <tr><td>Everything stopped after a PC restart</td><td>Boot task missing or disabled.</td><td>Open Task Scheduler and look for "RMS Print Agent". If missing, run <code>print-agent install</code> as administrator.</td></tr>
+  <tr><td>Tickets made while the PC was off never printed</td><td>By design: older than 10&nbsp;minutes.</td><td>They show under NOT PRINTED. Reprint if still needed.</td></tr>
+</table>
+
+<h3>Where to look for details</h3>
+<ul>
+  <li><strong>Log file:</strong> <code>C:\ProgramData\RMS Print Agent\logs\agent.log</code> &ndash; what the agent did and why a ticket did not print. It rotates at 5&nbsp;MB.</li>
+  <li><strong>Run it in a window to watch live:</strong> stop the task first (Task Scheduler &rarr; End), then in an administrator prompt <code>print-agent run</code>. Press Ctrl+C when done, then start the task again.</li>
+  <li><strong>Settings &rarr; Printing</strong> shows each agent's last contact and its latest error.</li>
+</ul>
+
+<div class="note warn">
+  <strong class="t">Never leave test mode on</strong>
+  Setting the environment variable <code>PRINT_AGENT_DRY_RUN=true</code> makes the agent write tickets to its log instead of printing. It is only for checking an install with no printer wired up. Nothing comes out of the printer while it is on.
+</div>
+
+<!-- ============================================================ -->
+<h2 id="fallback">11. Restaurant or hotel: what differs</h2>
+
+<p>The agent, the printers and the steps above are identical for both. What changes is which modules are enabled on the property and what extra tickets exist.</p>
+
+<table>
+  <tr><th></th><th>Restaurant only</th><th>Hotel (Rooms enabled)</th></tr>
+  <tr><td>Setup</td><td>Sections 2&ndash;8, once per venue.</td><td>The same, once per property. If the hotel restaurant is in a separate building with its own PC, enrol a second agent there.</td></tr>
+  <tr><td>Kitchen and bar papers</td><td>One combined ticket unless you turn on <span class="ui">KOT and BOT on separate papers</span> or have two printers.</td><td><span class="ui">KOT and BOT on separate papers</span> is <strong>on by default</strong> (an explicit setting still wins).</td></tr>
+  <tr><td>Room service</td><td>Not applicable.</td><td>A room-service order prints like a table order, with the room (e.g. <em>Room 101</em>) on the <em>Table</em> line of the slip. It follows the <span class="ui">New orders (and room service)</span> and <span class="ui">Items added to a running order</span> switches. A guest's own order from the room QR code prints the same way and is tagged <em>QR ORDER &middot; ROOM SERVICE</em>.</td></tr>
+  <tr><td>Bills</td><td>Restaurant bills print on the Bills printer when paid, if auto-print is on.</td><td>Same for restaurant bills. A room's tax invoice is created when the stay is settled but does <strong>not</strong> print by itself: press <span class="ui">Print</span> on it in Billing, or print the stay receipt from the settle screen.</td></tr>
+</table>
+
+<h3>Checklist for a hotel</h3>
+<ul class="checklist">
+  <li>Printers added and assigned: Kitchen, Bar (or the same printer for both), Bills (section 4).</li>
+  <li>Print automatically, New orders (and room service) and Items added to a running order are all on.</li>
+  <li>Agent installed, enrolled and showing <em>Print agent online</em> (sections 5&ndash;6).</li>
+  <li>Test pass: place a table order <strong>and</strong> a room-service order; both tickets come out with no dialog on screen (section 7).</li>
+  <li>Front desk knows that room invoices are printed with the <span class="ui">Print</span> button.</li>
+</ul>
+
+<h3>If the agent is offline</h3>
+<p>Tickets are saved and wait. They print as soon as the agent reconnects, unless they are older than 10&nbsp;minutes, in which case they show as NOT PRINTED so staff can choose to reprint. Nothing falls back to the browser. If the kitchen cannot wait, use the <span class="ui">Print</span> button on the order.</p>
+
+<!-- ============================================================ -->
+<h2 id="maintenance">12. Moving, removing, and old sites</h2>
+
+<h3>Replacing the reception PC</h3>
+<ol>
+  <li>In <span class="ui">Settings &rarr; Printing</span>, on that agent press <span class="ui">New code</span>.</li>
+  <li>Install the folder on the new PC and run the new enrol command (section 6).</li>
+  <li>The old PC is switched off the moment the new one enrols, so you never get two agents printing everything twice.</li>
+</ol>
+
+<h3>Stopping or removing an agent</h3>
+<ul>
+  <li><strong>On the PC:</strong> <code>print-agent uninstall</code> (as administrator) removes it from startup. Settings, queue and log stay.</li>
+  <li><strong>In the system:</strong> press <span class="ui">Remove</span> on the agent in settings. This disconnects it at once and its token stops working. Use this for a lost or stolen PC.</li>
+</ul>
+
+<h3>Venue that used the old local print server</h3>
+<ol>
+  <li>Run <code>npm run migrate-printers -- --dry-run</code>, then without <code>--dry-run</code> (backend folder). Printer names saved in settings become Windows printers in the new list.</li>
+  <li>Install and enrol the agent as in sections 5 and 6.</li>
+  <li>Send a test page to each printer.</li>
+  <li>Uninstall or stop the old print server program and delete any shortcut to it. Browsers also forget the old print-server address automatically.</li>
+</ol>
+<p>The migration assumes the old narrow layout (32 characters). If a venue has 80&nbsp;mm paper, edit the printer afterwards and choose 80&nbsp;mm.</p>
+
+<!-- ============================================================ -->
+<h2 id="reference">13. Quick reference</h2>
+
+<h3>Commands <span class="who">on the venue PC, in an administrator prompt</span></h3>
+<table>
+  <tr><th>Command</th><th>Does</th></tr>
+  <tr><td><code>print-agent enrol --server &lt;address&gt; --code &lt;code&gt;</code></td><td>Connect this PC to the restaurant (once).</td></tr>
+  <tr><td><code>print-agent install</code></td><td>Start now and at every boot.</td></tr>
+  <tr><td><code>print-agent status</code></td><td>Enrolled? installed? running? plus the last log lines.</td></tr>
+  <tr><td><code>print-agent run</code></td><td>Run in this window (testing only).</td></tr>
+  <tr><td><code>print-agent uninstall</code></td><td>Remove from startup.</td></tr>
+</table>
+
+<h3>Files on the PC</h3>
+<table>
+  <tr><th>Path (under <code>C:\ProgramData\RMS Print Agent</code>)</th><th>Holds</th></tr>
+  <tr><td><code>agent.json</code></td><td>What this PC was enrolled as. No secrets.</td></tr>
+  <tr><td><code>credentials.json</code></td><td>Sign-in token, encrypted for this PC only.</td></tr>
+  <tr><td><code>printers.json</code></td><td>The last printer list the server sent (so it still works after a reboot with no internet).</td></tr>
+  <tr><td><code>queue.db</code></td><td>Tickets received and not yet reported.</td></tr>
+  <tr><td><code>logs\agent.log</code></td><td>The log.</td></tr>
+</table>
+
+<h3>Rules to remember</h3>
+<ul>
+  <li>Enrolment code: one use, 24 hours, shown once.</li>
+  <li>Tickets older than 10 minutes are never printed late; they appear as NOT PRINTED.</li>
+  <li>A failing print is retried with growing delays (2&nbsp;s up to 30&nbsp;s) for up to 10 minutes, then reported failed.</li>
+  <li>Give every network printer a permanent IP address.</li>
+  <li>One agent per venue PC; a new enrolment replaces the old one.</li>
+  <li>Do the power-cut checks in section 8 at the first install at each venue.</li>
+</ul>
+
+<footer>
+  Technical background: <code>docs/printing.md</code> (how the pipeline works) and <code>print-agent/README.md</code> (agent internals and the hardware verification checklist).
+</footer>
+
+</div>
+</body>
+</html>
